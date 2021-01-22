@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.UUID;
 
-public class HelloFC implements PojoRequestHandler<MultipartFile, String> {
+public class OSSFC implements PojoRequestHandler<MultipartFile, String> {
 
   private OSSClient oss;
   private UploadConfig uploadConfig = new UploadConfig();
