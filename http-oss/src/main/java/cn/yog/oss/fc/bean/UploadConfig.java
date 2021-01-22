@@ -1,4 +1,4 @@
-package cn.yog.oss.fc.a;
+package cn.yog.oss.fc.bean;
 
 public class UploadConfig {
 

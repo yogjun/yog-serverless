@@ -1,5 +1,8 @@
-package cn.yog.oss.fc.a;
+package cn.yog.oss.fc;
 
+import cn.yog.oss.fc.bean.LoadIn;
+import cn.yog.oss.fc.bean.LoadOut;
+import cn.yog.oss.fc.bean.UploadConfig;
 import com.aliyun.fc.runtime.Context;
 import com.aliyun.fc.runtime.Credentials;
 import com.aliyun.fc.runtime.PojoRequestHandler;
@@ -14,9 +17,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
-public class OSSFC implements PojoRequestHandler<MultipartFile, String> {
+public class OSSFC implements PojoRequestHandler<LoadIn, LoadOut> {
 
   private OSSClient oss;
   private UploadConfig uploadConfig = new UploadConfig();
@@ -26,7 +30,7 @@ public class OSSFC implements PojoRequestHandler<MultipartFile, String> {
    * @return
    */
   @Override
-  public String handleRequest(MultipartFile file, Context context) {
+  public LoadOut handleRequest(LoadIn file, Context context) {
     Credentials creds = context.getExecutionCredentials();
     oss =
         new OSSClient(
@@ -34,11 +38,12 @@ public class OSSFC implements PojoRequestHandler<MultipartFile, String> {
             creds.getAccessKeyId(),
             creds.getAccessKeySecret(),
             creds.getSecurityToken());
-    //    client.putObject(bucketName, "my-object", new ByteArrayInputStream(new
-    // String("hello").getBytes()));
-    //    outputStream.write(new String("done").getBytes());
-    //    String message = "Hello, " + request.getFirstName() + " " + request.getLastName();
-    return upload(file);
+    context.getLogger().info(file == null ? "" : file.toString());
+    if (Objects.isNull(file)) {
+      context.getLogger().error("file empty");
+      return new LoadOut("");
+    }
+    return new LoadOut(upload(file.getFile()));
   }
 
   /**
