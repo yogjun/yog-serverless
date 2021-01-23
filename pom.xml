@@ -10,7 +10,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>http-oss</module>
+        <module>fc-oss</module>
+        <module>fc-db-mysql</module>
     </modules>
 
     <properties>

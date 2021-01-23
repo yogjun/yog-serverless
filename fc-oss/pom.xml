@@ -9,7 +9,7 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>http-oss</artifactId>
+    <artifactId>fc-oss</artifactId>
     <version>${revision}</version>
     <packaging>jar</packaging>
 </project>

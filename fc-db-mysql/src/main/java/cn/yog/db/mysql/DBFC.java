@@ -1,4 +1,4 @@
-package cn.yog.oss.fc;
+package cn.yog.db.mysql;
 
 import com.aliyun.fc.runtime.Context;
 import com.aliyun.fc.runtime.FunctionComputeLogger;
@@ -48,7 +48,7 @@ public class DBFC implements StreamRequestHandler, FunctionInitializer {
 
       logger.info("Successfully executed query.  Current: " + currentTime);
 
-      String sql = "REPLACE INTO users (id, name) VALUES(?, ?)";
+      String sql = "INSERT INTO user (id, name) VALUES(?, ?)";
 
       PreparedStatement ps = conn.prepareStatement(sql);
       ps.setString(1, "3");
@@ -56,7 +56,7 @@ public class DBFC implements StreamRequestHandler, FunctionInitializer {
 
       ps.execute();
 
-      resultSet = stmt.executeQuery("SELECT * FROM users");
+      resultSet = stmt.executeQuery("SELECT * FROM user");
 
       while (resultSet.next()) {
         logger.info("user: " + resultSet.getString(2));
