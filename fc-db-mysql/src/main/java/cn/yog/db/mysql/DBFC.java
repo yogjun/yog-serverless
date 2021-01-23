@@ -25,7 +25,11 @@ public class DBFC implements StreamRequestHandler {
   @Override
   public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context)
       throws IOException {
+    context.getLogger().info("start log in it");
+    this.queryUsers(inputStream, outputStream, context);
+  }
 
+  private void queryUsers(InputStream inputStream, OutputStream outputStream, Context context) throws IOException {
     FunctionComputeLogger logger = context.getLogger();
 
     String currentTime = "unavailable";
