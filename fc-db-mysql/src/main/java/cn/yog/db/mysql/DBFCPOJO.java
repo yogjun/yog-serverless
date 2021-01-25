@@ -1,33 +1,30 @@
 package cn.yog.db.mysql;
 
+import cn.yog.db.mysql.bean.QueryRequest;
+import cn.yog.db.mysql.bean.QueryResponse;
 import cn.yog.db.mysql.config.FcConfig;
 import com.aliyun.fc.runtime.Context;
 import com.aliyun.fc.runtime.FunctionComputeLogger;
-import com.aliyun.fc.runtime.StreamRequestHandler;
+import com.aliyun.fc.runtime.PojoRequestHandler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.*;
 
-public class DBFC implements StreamRequestHandler {
+public class DBFCPOJO implements PojoRequestHandler<QueryRequest, QueryResponse> {
 
   private FcConfig config;
 
-  public DBFC() {
+  public DBFCPOJO() {
     config = new FcConfig();
   }
 
   @Override
-  public void handleRequest(InputStream inputStream, OutputStream outputStream, Context context)
-      throws IOException {
-    context.getLogger().info("start log in it");
-    this.queryUsers(inputStream, outputStream, context);
+  public QueryResponse handleRequest(QueryRequest input, Context context) {
+    return this.queryUsers(input, context);
   }
 
-  private void queryUsers(InputStream inputStream, OutputStream outputStream, Context context)
-      throws IOException {
+  private QueryResponse queryUsers(QueryRequest input, Context context) {
     FunctionComputeLogger logger = context.getLogger();
+    QueryResponse response = new QueryResponse();
 
     String currentTime = "unavailable";
 
@@ -45,8 +42,8 @@ public class DBFC implements StreamRequestHandler {
       String sql = "REPLACE INTO users (id, name) VALUES(?, ?)";
 
       PreparedStatement ps = conn.prepareStatement(sql);
-      ps.setString(1, "3");
-      ps.setString(2, "du");
+      ps.setString(1, input.getBody());
+      ps.setString(2, input.getBody());
 
       ps.execute();
 
@@ -59,8 +56,8 @@ public class DBFC implements StreamRequestHandler {
     } catch (SQLException e) {
       e.printStackTrace();
     }
-
-    outputStream.write(currentTime.getBytes());
+    response.setBody(currentTime);
+    return response;
   }
 
   private Connection getConnection() throws SQLException {
